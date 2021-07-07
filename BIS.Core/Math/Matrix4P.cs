@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using BIS.Core.Streams;
 
 namespace BIS.Core.Math
@@ -57,5 +58,7 @@ namespace BIS.Core.Math
         {
             return matrix.ToString();
         }
+
+        public Matrix4x4 Matrix => matrix;
     }
 }
