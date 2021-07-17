@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BIS.RTM", "..\BIS.RTM\BIS.R
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BIS.WRP", "..\BIS.WRP\BIS.WRP.csproj", "{2B43DF8A-8D46-45FE-AD10-63AF88E0B570}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3dUtil", "P3dUtil\P3dUtil.csproj", "{EC9E571D-466E-48C7-9BBF-6B6E3187F112}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{2B43DF8A-8D46-45FE-AD10-63AF88E0B570}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B43DF8A-8D46-45FE-AD10-63AF88E0B570}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B43DF8A-8D46-45FE-AD10-63AF88E0B570}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC9E571D-466E-48C7-9BBF-6B6E3187F112}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC9E571D-466E-48C7-9BBF-6B6E3187F112}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC9E571D-466E-48C7-9BBF-6B6E3187F112}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC9E571D-466E-48C7-9BBF-6B6E3187F112}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
