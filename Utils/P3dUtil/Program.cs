@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Text.Json;
 using BIS.P3D.MLOD;
 using CommandLine;
-using Tomlet;
 
 namespace P3dUtil
 {
@@ -11,7 +11,7 @@ namespace P3dUtil
         [Verb("template", HelpText = "Generate P3D files based on a template definition.")]
         class TemlateOptions
         {
-            [Value(0, MetaName = "template", HelpText = "Template definition TOML file.", Required = true)]
+            [Value(0, MetaName = "template", HelpText = "Template definition JSON file.", Required = true)]
             public string TemplateDefinition { get; set; }
 
             [Option('n', "no-backup", Required = false, HelpText = "Do not generate a backup files (.p3d.bak).")]
@@ -49,9 +49,8 @@ namespace P3dUtil
 
         private static int Templating(TemlateOptions opts)
         {
-            var document = TomlParser.ParseFile(opts.TemplateDefinition);
             var documentDirectory = Path.GetDirectoryName(Path.GetFullPath(opts.TemplateDefinition));
-            var definition = TomletMain.To<TemlateDefinition>(document);
+            var definition = JsonSerializer.Deserialize<TemlateDefinition>(File.ReadAllText(opts.TemplateDefinition), new JsonSerializerOptions() { ReadCommentHandling = JsonCommentHandling.Skip, PropertyNameCaseInsensitive = true });
 
             var backup = opts.NoBackup ? false : definition.Backup ?? true;
 
