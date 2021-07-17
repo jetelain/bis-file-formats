@@ -2,7 +2,7 @@
 {
     public class TemlateDefinition
     {
-        public string MasterFile { get; set; }
+        public string TemplateFile { get; set; }
         public string TextureBaseDirectory { get; set; }
         public string TexturePattern { get; set; }
         public string TextureNameFilter { get; set; }

@@ -64,23 +64,23 @@ namespace P3dUtil
 
         private static void PerTextureTemplating(string directory, TemlateDefinition definition, bool backup)
         {
-            definition.MasterFile = Path.Combine(directory, definition.MasterFile);
+            definition.TemplateFile = Path.Combine(directory, definition.TemplateFile);
             definition.TextureBaseDirectory = Path.Combine(directory, definition.TextureBaseDirectory);
             definition.TexturePattern = definition.TexturePattern ?? "*.paa";
             definition.TextureNameFilter = definition.TextureNameFilter ?? definition.TexturePattern.Replace("*", "");
             definition.TextureBaseGamePath = definition.TextureBaseGamePath ?? "";
 
-            Console.WriteLine($"MasterFile           = '{definition.MasterFile}'");
+            Console.WriteLine($"TemplateFile         = '{definition.TemplateFile}'");
             Console.WriteLine($"TextureBaseDirectory = '{definition.TextureBaseDirectory}'");
             Console.WriteLine($"TextureBaseGamePath  = '{definition.TextureBaseGamePath}'");
             Console.WriteLine($"TexturePattern       = '{definition.TexturePattern}'");
             Console.WriteLine($"TextureNameFilter    = '{definition.TextureNameFilter}'");
 
-            var master = new MLOD(definition.MasterFile);
+            var master = new MLOD(definition.TemplateFile);
             foreach (var file in Directory.GetFiles(definition.TextureBaseDirectory, definition.TexturePattern, SearchOption.AllDirectories))
             {
                 var p3d = file.Replace(definition.TextureNameFilter, ".p3d", StringComparison.OrdinalIgnoreCase);
-                if (!string.Equals(definition.MasterFile, p3d, StringComparison.OrdinalIgnoreCase))
+                if (!string.Equals(definition.TemplateFile, p3d, StringComparison.OrdinalIgnoreCase))
                 {
                     Console.WriteLine($"Process '{file}'...");
                     if (File.Exists(p3d) && backup)
