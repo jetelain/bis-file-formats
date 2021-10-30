@@ -40,3 +40,19 @@ This verb allows you to make a find and replace operation on texture and materia
 
 Sample : 
 `p3dutil replace-path *.p3d "z\gtd\" "z\gtdi\"`
+
+## UV transform
+
+This verb allows you to make an affine transform on UV of a texture.
+
+It can help to merge multiple textures into a single one to save space and reduce memory usage.
+
+`p3dutil uv-transform <source> <target> --texture <texture path> --u-mul <Umul> --u-add <Uadd> --v-mul <Vmul> --v-add <Vadd>`
+
+- U<sub>target</sub> = U<sub>source</sub> * U<sub>mul</sub> + U<sub>add</sub>
+- V<sub>target</sub> = V<sub>source</sub> * V<sub>mul</sub> + V<sub>add</sub>
+
+Sample : 
+`p3dutil uv-transform model1.p3d model2.p3d --texture wall_co --u-mul -1 --u-add 1`
+
+(Horizontal mirror on texture wall_co)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using BIS.P3D.MLOD;
 using CommandLine;
@@ -38,13 +39,78 @@ namespace P3dUtil
         }
 
 
+        [Verb("uv-transform", HelpText = "Transform UV of a texture : Utarget = Usource * u-mul + u-add ; Vtarget = Vsource * v-mul + v-add.")]
+        class UvTransformOptions
+        {
+            [Value(0, MetaName = "source", HelpText = "Source file", Required = true)]
+            public string Source { get; set; }
+
+            [Value(1, MetaName = "target", HelpText = "Target file")]
+            public string Target { get; set; }
+
+            [Option("texture", Required = false, HelpText = "Texture")]
+            public string Texture { get; set; }
+
+            [Option("u-add", Required = false, HelpText = "Shift on U")]
+            public float UAdd { get; set; } = 0f;
+
+            [Option("u-mul", Required = false, HelpText = "Factor on original U")]
+            public float UMul { get; set; } = 1f;
+
+            [Option("v-add", Required = false, HelpText = "Shift on V")]
+            public float VAdd { get; set; } = 0f;
+
+            [Option("v-mul", Required = false, HelpText = "Factor on original V")]
+            public float VMul { get; set; } = 1f;
+        }
+
         public static int Main(string[] args)
         {
-            return CommandLine.Parser.Default.ParseArguments<TemlateOptions, ReplaceOptions>(args)
+            return CommandLine.Parser.Default.ParseArguments<TemlateOptions, ReplaceOptions, UvTransformOptions>(args)
               .MapResult(
                 (TemlateOptions opts) => Templating(opts),
                 (ReplaceOptions opts) => Replace(opts),
+                (UvTransformOptions opts) => UvTransform(opts),
                 errs => 1);
+        }
+
+        private static int UvTransform(UvTransformOptions opts)
+        {
+            if ( string.IsNullOrEmpty(opts.Target))
+            {
+                opts.Target = opts.Source;
+            }
+            Console.WriteLine($"Process '{opts.Source}'...");
+            var p3d = new MLOD(opts.Source);
+            foreach (var lod in p3d.Lods)
+            {
+                var uvset = lod.Taggs.OfType<UVSetTagg>().FirstOrDefault();
+                var faceIndex = 0;
+                foreach (var face in lod.Faces)
+                {
+                    if (string.IsNullOrEmpty(opts.Texture) || face.Texture.Contains(opts.Texture, StringComparison.OrdinalIgnoreCase))
+                    {
+                        var faceUVs = uvset?.FaceUVs[faceIndex];
+                        var vertexIndex = 0;
+                        foreach (var vert in face.Vertices.Take(face.VertexCount))
+                        {
+                            vert.U = opts.UMul * vert.U + opts.UAdd;
+                            vert.V = opts.VMul * vert.V + opts.VAdd;
+                            if (faceUVs != null)
+                            {
+                                faceUVs[vertexIndex, 0] = vert.U;
+                                faceUVs[vertexIndex, 1] = vert.V;
+                            }
+                            vertexIndex++;
+                        }
+                    }
+                    faceIndex++;
+                }
+            }
+            Console.WriteLine($"  Save to '{opts.Target}'...");
+            p3d.WriteToFile(opts.Target, true);
+            Console.WriteLine("  Done");
+            return 0;
         }
 
         private static int Templating(TemlateOptions opts)
