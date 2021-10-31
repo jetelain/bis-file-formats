@@ -141,30 +141,57 @@ namespace P3dUtil
             Console.WriteLine($"TexturePattern       = '{definition.TexturePattern}'");
             Console.WriteLine($"TextureNameFilter    = '{definition.TextureNameFilter}'");
 
-            var master = new MLOD(definition.TemplateFile);
+
+            if (definition.TemplateFile.Contains('*'))
+            {
+                var templateFiles = Directory.GetFiles(Path.GetDirectoryName(definition.TemplateFile), Path.GetFileName(definition.TemplateFile));
+                foreach (var templateFile in templateFiles)
+                {
+                    Console.WriteLine($"Template '{templateFile}'");
+                    PerTextureTemplate(definition, backup, Path.GetFileNameWithoutExtension(templateFile) + "_", templateFile, templateFiles);
+                }
+            }
+            else
+            {
+
+                PerTextureTemplate(definition, backup, string.Empty, definition.TemplateFile, new[] { definition.TemplateFile });
+            }
+
+
+        }
+
+        private static void PerTextureTemplate(TemlateDefinition definition, bool backup, string prefix, string templateFile, string[] templateFiles)
+        {
             foreach (var file in Directory.GetFiles(definition.TextureBaseDirectory, definition.TexturePattern, SearchOption.AllDirectories))
             {
                 var p3d = file.Replace(definition.TextureNameFilter, ".p3d", StringComparison.OrdinalIgnoreCase);
-                if (!string.Equals(definition.TemplateFile, p3d, StringComparison.OrdinalIgnoreCase))
+                if (!string.IsNullOrEmpty(prefix))
                 {
-                    Console.WriteLine($"Process '{file}'...");
+                    p3d = Path.Combine(Path.GetDirectoryName(p3d), prefix + Path.GetFileName(p3d));
+                }
+                if (!templateFiles.Contains(p3d, StringComparer.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine($"  Process '{p3d}'...");
                     if (File.Exists(p3d) && backup)
                     {
                         BackupFile(p3d);
                     }
                     var newTexture = file.Replace(definition.TextureBaseDirectory, definition.TextureBaseGamePath, StringComparison.OrdinalIgnoreCase);
-                    Console.WriteLine($"  '{definition.InitialTexture}' -> '{newTexture}'");
-                    foreach (var lod in master.Lods)
+                    var template = new MLOD(templateFile);
+                    var changes = 0;
+                    foreach (var lod in template.Lods)
                     {
                         foreach (var face in lod.Faces)
                         {
                             if (string.Equals(face.Texture, definition.InitialTexture, StringComparison.OrdinalIgnoreCase))
                             {
                                 face.Texture = newTexture;
+                                changes++;
                             }
                         }
                     }
-                    master.WriteToFile(p3d, true);
+                    Console.WriteLine($"  '{definition.InitialTexture}' -> '{newTexture}' (x{changes})");
+                    template.WriteToFile(p3d, true);
                 }
             }
         }
