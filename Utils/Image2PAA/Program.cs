@@ -1,12 +1,13 @@
-﻿using BIS.PAA;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
+using BCnEncoder.Shared;
+using BIS.PAA.Encoder;
 using CommandLine;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using System;
-using System.IO;
-using System.Linq;
 
-namespace PAA2PNG
+namespace Image2PAA
 {
     class Program
     {
@@ -24,27 +25,17 @@ namespace PAA2PNG
             return Parser.Default.ParseArguments<Options>(args)
                    .MapResult(o =>
                    {
-                       var ext = Path.GetExtension(o.Source);
-                       var isPAA = ext.Equals(".paa", System.StringComparison.OrdinalIgnoreCase);
-                       var isPAC = ext.Equals(".pac", System.StringComparison.OrdinalIgnoreCase);
-                       if (!isPAA && !isPAC)
-                       {
-                           Console.Error.WriteLine($"File '{o.Source}' is not a PAA or a PAC.");
-                           return 2;
-                       }
-
                        if (Path.GetFileNameWithoutExtension(o.Source).Contains("*"))
                        {
                            var files = Directory.GetFiles(Path.GetDirectoryName(o.Source), Path.GetFileName(o.Source));
 
-                           foreach (var file in files)
+                           Parallel.ForEach(files, file =>
                            {
-                               var target = string.IsNullOrEmpty(o.Target) ? 
-                                   Path.ChangeExtension(file, ".png") : 
-                                   Path.Combine(o.Target, Path.ChangeExtension(Path.GetFileName(file), ".png"));
-
-                               Convert(isPAC, file, target);
-                           }
+                               var target = string.IsNullOrEmpty(o.Target) ?
+                                  Path.ChangeExtension(file, ".paa") :
+                                  Path.Combine(o.Target, Path.ChangeExtension(Path.GetFileName(file), ".paa"));
+                               Convert(file, target);
+                           });
                        }
                        else
                        {
@@ -54,25 +45,32 @@ namespace PAA2PNG
                                return 1;
                            }
                            var target = string.IsNullOrEmpty(o.Target) ?
-                             Path.ChangeExtension(o.Source, ".png") :
+                             Path.ChangeExtension(o.Source, ".paa") :
                              o.Target;
-                           Convert(isPAC, o.Source, target);
+                           Convert(o.Source, target);
                        }
                        return 0;
                    },
                    e => 3);
         }
 
-        private static void Convert(bool isPAC, string source, string target)
+        private static void Convert(string source, string target)
         {
             Console.WriteLine($"{source} -> {target}");
             using (var paaStream = File.OpenRead(source))
             {
-                var paa = new PAA(paaStream, isPAC);
-                var pixels = PAA.GetARGB32PixelData(paa, paaStream);
-                using (var image = Image.LoadPixelData<Bgra32>(pixels, paa.Width, paa.Height))
+                using (var img = Image.Load<Rgba32>(source))
                 {
-                    image.SaveAsPng(target);
+                    var targetPixels = new ColorRgba32[img.Height, img.Width];
+                    for (int y = 0; y < img.Height; ++y)
+                    {
+                        for (int x = 0; x < img.Width; ++x)
+                        {
+                            var srcPixel = img[x, y];
+                            targetPixels[y, x] = new ColorRgba32(srcPixel.R, srcPixel.G, srcPixel.B, srcPixel.A);
+                        }
+                    }
+                    PaaEncoder.WritePAA(target, targetPixels);
                 }
             }
         }

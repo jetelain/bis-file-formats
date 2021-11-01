@@ -1,0 +1,31 @@
+name: dotnet
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  dotnet:
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    name: Build (${{ matrix.os }})
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+
+    - name: Build
+      run: dotnet build
+
+    - name: Test
+      run: dotnet test
+
+    - name: Build Utils
+      run: dotnet build
+      working-directory: Utils
