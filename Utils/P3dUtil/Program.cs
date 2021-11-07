@@ -225,7 +225,11 @@ namespace P3dUtil
             {
                 BackupFile(file);
             }
-            var p3d = new MLOD(file);
+            MLOD p3d;
+            using (var stream = File.OpenRead(file))
+            {
+                p3d = new MLOD(stream);
+            }
             foreach(var lod in p3d.Lods)
             {
                 foreach (var face in lod.Faces)
