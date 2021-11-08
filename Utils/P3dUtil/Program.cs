@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -64,14 +65,93 @@ namespace P3dUtil
             public float VMul { get; set; } = 1f;
         }
 
+        [Verb("rm-faces", HelpText = "Removes faces with specified texture that have a point with Y between y-from and y-top.")]
+        class RemoveFacesOptions
+        {
+            [Value(0, MetaName = "source", HelpText = "Source file", Required = true)]
+            public string Source { get; set; }
+
+            [Value(1, MetaName = "target", HelpText = "Target file")]
+            public string Target { get; set; }
+
+            [Option("texture", Required = false, HelpText = "Only faces with this textures")]
+            public string Texture { get; set; }
+
+            [Option("y-from", Required = false, HelpText = "Y From")]
+            public float YFrom { get; set; } = float.MinValue;
+
+            [Option("y-to", Required = false, HelpText = "Y To")]
+            public float YTo { get; set; } = float.MaxValue;
+        }
+
         public static int Main(string[] args)
         {
-            return CommandLine.Parser.Default.ParseArguments<TemlateOptions, ReplaceOptions, UvTransformOptions>(args)
+            return CommandLine.Parser.Default.ParseArguments<TemlateOptions, ReplaceOptions, UvTransformOptions, RemoveFacesOptions>(args)
               .MapResult(
                 (TemlateOptions opts) => Templating(opts),
                 (ReplaceOptions opts) => Replace(opts),
                 (UvTransformOptions opts) => UvTransform(opts),
+                (RemoveFacesOptions opts) => RemoveFaces(opts),
                 errs => 1);
+        }
+
+        private static int RemoveFaces(RemoveFacesOptions opts)
+        {
+            if (string.IsNullOrEmpty(opts.Target))
+            {
+                opts.Target = opts.Source;
+            }
+            Console.WriteLine($"Process '{opts.Source}'...");
+            var p3d = new MLOD(opts.Source);
+
+            
+            foreach (var lod in p3d.Lods)
+            {
+                var faceIndex = 0;
+                var facesIndexToRemove = new List<int>();
+                foreach (var face in lod.Faces)
+                {
+                    if ((string.IsNullOrEmpty(opts.Texture) || face.Texture.Contains(opts.Texture, StringComparison.OrdinalIgnoreCase)) &&
+                        face.RealVertices.Select(v => lod.Points[v.PointIndex]).Any(p => p.Y >= opts.YFrom && p.Y <= opts.YTo))
+                    {
+                        facesIndexToRemove.Add(faceIndex);
+                    }
+                    faceIndex++;
+                }
+                Console.WriteLine($"  LOD #{lod.Resolution}, {facesIndexToRemove.Count} faces to remove (on {lod.Faces.Length})");
+
+                if (facesIndexToRemove.Count > 0)
+                {
+                    lod.Faces = lod.Faces.Where((_, i) => !facesIndexToRemove.Contains(i)).ToArray();
+                    foreach (var uvset in lod.Taggs.OfType<UVSetTagg>())
+                    {
+                        uvset.FaceUVs = uvset.FaceUVs.Where((_, i) => !facesIndexToRemove.Contains(i)).ToArray();
+                        uvset.UpdateDataSize();
+                    }
+                    var sel = lod.Taggs.OfType<SelectedTagg>().FirstOrDefault();
+                    if (sel != null)
+                    {
+                        sel.Faces = sel.Faces.Where((_, i) => !facesIndexToRemove.Contains(i)).ToArray();
+                        sel.UpdateDataSize();
+                    }
+                    var lck = lod.Taggs.OfType<LockTagg>().FirstOrDefault();
+                    if (lck != null)
+                    {
+                        lck.LockedFaces = lck.LockedFaces.Where((_, i) => !facesIndexToRemove.Contains(i)).ToArray();
+                        lck.UpdateDataSize();
+                    }
+                    foreach (var select in lod.Taggs.OfType<NamedSelectionTagg>())
+                    {
+                        select.Faces = select.Faces.Where((_, i) => !facesIndexToRemove.Contains(i)).ToArray();
+                        select.UpdateDataSize();
+                    }
+                }
+            }
+
+            Console.WriteLine($"  Save to '{opts.Target}'...");
+            p3d.WriteToFile(opts.Target, true);
+            Console.WriteLine("  Done");
+            return 0;
         }
 
         private static int UvTransform(UvTransformOptions opts)
@@ -84,22 +164,21 @@ namespace P3dUtil
             var p3d = new MLOD(opts.Source);
             foreach (var lod in p3d.Lods)
             {
-                var uvset = lod.Taggs.OfType<UVSetTagg>().FirstOrDefault();
+                var uvsetTaggs = lod.Taggs.OfType<UVSetTagg>().ToList();
                 var faceIndex = 0;
                 foreach (var face in lod.Faces)
                 {
                     if (string.IsNullOrEmpty(opts.Texture) || face.Texture.Contains(opts.Texture, StringComparison.OrdinalIgnoreCase))
                     {
-                        var faceUVs = uvset?.FaceUVs[faceIndex];
                         var vertexIndex = 0;
                         foreach (var vert in face.Vertices.Take(face.VertexCount))
                         {
                             vert.U = opts.UMul * vert.U + opts.UAdd;
                             vert.V = opts.VMul * vert.V + opts.VAdd;
-                            if (faceUVs != null)
+                            foreach (var uvset in uvsetTaggs)
                             {
-                                faceUVs[vertexIndex, 0] = vert.U;
-                                faceUVs[vertexIndex, 1] = vert.V;
+                                uvset.FaceUVs[faceIndex][vertexIndex, 0] = vert.U;
+                                uvset.FaceUVs[faceIndex][vertexIndex, 1] = vert.V;
                             }
                             vertexIndex++;
                         }
