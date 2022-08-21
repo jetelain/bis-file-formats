@@ -49,7 +49,7 @@ namespace BIS.P3D.MLOD
             Lods = input.ReadArray(inp => new P3DM_LOD(inp));
         }
 
-        private void Write(BinaryWriterEx output)
+        internal void Write(BinaryWriterEx output)
         {
             output.WriteAscii("MLOD", 4);
             output.Write(Version);

@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace BIS.P3D.MLOD
 {
-    public class P3DM_LOD
+    public class P3DM_LOD : ILevelOfDetail
     {
         private int Flags { get; set; }
         public int Version { get; private set; }
@@ -15,6 +15,14 @@ namespace BIS.P3D.MLOD
         public Face[] Faces { get; private set; }
         public LinkedList<Tagg> Taggs { get; private set; }
         public float Resolution { get; private set; }
+
+        public IEnumerable<Tuple<string, string>> NamedProperties => Taggs.OfType<PropertyTagg>().Select(p => new Tuple<string, string>(p.PropertyName, p.Value));
+
+        public int FaceCount => Faces.Length;
+
+        public IEnumerable<string> NamedSelections => Taggs.OfType<NamedSelectionTagg>().Select(p => p.Name);
+
+        public uint VertexCount => (uint)Points.Length;
 
         public P3DM_LOD(BinaryReaderEx input)
         {
@@ -100,6 +108,16 @@ namespace BIS.P3D.MLOD
             foreach (Tagg tagg in Taggs)
                 tagg.Write(output);
             output.Write(Resolution);
+        }
+
+        public IEnumerable<string> GetTextures()
+        {
+            return Faces.Select(f => f.Texture).Distinct();
+        }
+
+        public IEnumerable<string> GetMaterials()
+        {
+            return Faces.Select(f => f.Material).Distinct();
         }
     }
 }
