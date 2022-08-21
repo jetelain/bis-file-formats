@@ -2,9 +2,9 @@
 
 namespace BIS.P3D.ODOL
 {
-	internal class Section
+	public class Section
 	{
-		public Section(BinaryReaderEx input, int version)
+		internal Section(BinaryReaderEx input, int version)
 		{
 			FaceLowerIndex = input.ReadInt32();
 			FaceUpperIndex = input.ReadInt32();
@@ -44,7 +44,7 @@ namespace BIS.P3D.ODOL
 		public short TextureIndex { get; }
 		public uint Special { get; }
 		public int MaterialIndex { get; }
-		public string Material { get; }
+		public string Material { get; set; }
 		public float[] AreaOverTex { get; }
 		public int Flag67 { get; }
 		public float[] Unused67 { get; }

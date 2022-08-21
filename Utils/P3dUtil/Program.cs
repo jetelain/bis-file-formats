@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using BIS.Core.Streams;
 using BIS.P3D.MLOD;
 using CommandLine;
 
@@ -20,7 +21,7 @@ namespace P3dUtil
             public bool NoBackup { get; set; }
         }
 
-        [Verb("replace-path", HelpText = "Replace a path in all texture and material reference of a P3D file.")]
+        [Verb("replace-path", HelpText = "Replace a path in all texture and material reference of a P3D file. (MLOD or ODOL)")]
         class ReplaceOptions
         {
             [Value(0, MetaName = "model", HelpText = "P3D file(s) (can be a pattern)", Required = true)]
@@ -304,21 +305,69 @@ namespace P3dUtil
             {
                 BackupFile(file);
             }
-            MLOD p3d;
-            using (var stream = File.OpenRead(file))
+
+            var reportedReplaces = new HashSet<string>();
+
+            var p3d = StreamHelper.Read<BIS.P3D.P3D>(file);
+
+            if (p3d.MLOD != null)
             {
-                p3d = new MLOD(stream);
-            }
-            foreach(var lod in p3d.Lods)
-            {
-                foreach (var face in lod.Faces)
+                foreach (var lod in p3d.MLOD.Lods)
                 {
-                    face.Material = face.Material?.Replace(oldPath, newPath, StringComparison.OrdinalIgnoreCase);
-                    face.Texture = face.Texture?.Replace(oldPath, newPath, StringComparison.OrdinalIgnoreCase);
+                    foreach (var face in lod.Faces)
+                    {
+                        face.Material = Replace(face.Material, oldPath, newPath, reportedReplaces);
+                        face.Texture = Replace(face.Texture, oldPath, newPath, reportedReplaces);
+                    }
                 }
+                p3d.MLOD.Write(file);
             }
-            p3d.WriteToFile(file, true);
+            else
+            {
+                foreach (var lod in p3d.ODOL.Lods)
+                {
+                    for (int i = 0; i < lod.Textures.Length; ++i)
+                    {
+                        lod.Textures[i] = Replace(lod.Textures[i], oldPath, newPath, reportedReplaces);
+                    }
+                    foreach (var mat in lod.Materials)
+                    {
+                        mat.MaterialName = Replace(mat.MaterialName, oldPath, newPath, reportedReplaces);
+                        mat.SurfaceFile = Replace(mat.SurfaceFile, oldPath, newPath, reportedReplaces);
+                        foreach (var tex in mat.StageTextures)
+                        {
+                            tex.Texture = Replace(tex.Texture, oldPath, newPath, reportedReplaces);
+                        }
+                        if (mat.StageTI != null)
+                        {
+                            mat.StageTI.Texture = Replace(mat.StageTI.Texture, oldPath, newPath, reportedReplaces);
+                        }
+                    }
+                    foreach (var sec in lod.Sections)
+                    {
+                        sec.Material = Replace(sec.Material, oldPath, newPath, reportedReplaces);
+                    }
+                }
+                p3d.ODOL.Write(file);
+            }
+
             Console.WriteLine("  Done");
+        }
+
+
+        private static string Replace(string value, string oldPath, string newPath, HashSet<string> reportedReplaces)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return value;
+            }
+            var newValue = value.Replace(oldPath, newPath, StringComparison.OrdinalIgnoreCase);
+            if (newValue != value && !reportedReplaces.Contains(value))
+            {
+                Console.WriteLine($"  '{value}' -> '{newValue}'");
+                reportedReplaces.Add(value);
+            }
+            return newValue;
         }
 
         private static void BackupFile(string file)

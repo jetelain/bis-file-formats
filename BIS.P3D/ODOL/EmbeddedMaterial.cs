@@ -3,7 +3,7 @@ using BIS.Core.Streams;
 
 namespace BIS.P3D.ODOL
 {
-    internal class EmbeddedMaterial
+	public class EmbeddedMaterial
     {
         public EmbeddedMaterial(BinaryReaderEx input)
         {
@@ -75,7 +75,7 @@ namespace BIS.P3D.ODOL
 			}
 		}
 
-        public string MaterialName { get; }
+        public string MaterialName { get; set; }
         public uint Version { get; }
         public ColorP Emissive { get; }
         public ColorP Ambient { get; }
@@ -89,7 +89,7 @@ namespace BIS.P3D.ODOL
         public uint MainLight { get; }
         public uint FogMode { get; }
         public bool Unused3 { get; }
-        public string SurfaceFile { get; }
+        public string SurfaceFile { get; set; }
         public uint NRenderFlags { get; }
         public uint RenderFlags { get; }
         public StageTexture[] StageTextures { get; }

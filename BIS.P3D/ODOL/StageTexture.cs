@@ -2,9 +2,9 @@
 
 namespace BIS.P3D.ODOL
 {
-	internal class StageTexture
+	public class StageTexture
 	{
-		public StageTexture(BinaryReaderEx input, uint version)
+		internal StageTexture(BinaryReaderEx input, uint version)
 		{
 			if (version >= 5u)
 			{
@@ -23,13 +23,13 @@ namespace BIS.P3D.ODOL
 
 		public bool UseWorldEnvMap { get; }
 
-		public string Texture { get; }
+		public string Texture { get; set; }
 
 		public uint StageID { get; }
 
 		public uint TextureFilter { get; }
 
-		public void Write(BinaryWriterEx output, uint version)
+		internal void Write(BinaryWriterEx output, uint version)
 		{
 			if (version >= 5u)
 			{

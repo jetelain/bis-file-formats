@@ -3,18 +3,19 @@ using BIS.Core.Streams;
 
 namespace BIS.P3D.ODOL
 {
-    internal class StageTransform
+    public class StageTransform
     {
-        public StageTransform(BinaryReaderEx input)
+        internal StageTransform(BinaryReaderEx input)
         {
             UvSource = input.ReadUInt32();
             Transformation = new Matrix4P(input);
         }
 
         public uint UvSource { get; }
+
         public Matrix4P Transformation { get; }
 
-        public void Write(BinaryWriterEx output)
+        internal void Write(BinaryWriterEx output)
         {
             output.Write(UvSource);
             Transformation.Write(output);

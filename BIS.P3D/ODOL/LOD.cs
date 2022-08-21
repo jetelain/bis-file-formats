@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using BIS.Core;
 using BIS.Core.Math;
@@ -9,7 +8,7 @@ using BIS.Core.Streams;
 
 namespace BIS.P3D.ODOL
 {
-	public class LOD : ILevelOfDetail
+    public class LOD : ILevelOfDetail
 	{
         internal LOD(BinaryReaderEx input, float resolution, LoadableLodInfo loadableLodInfo, int version)
         {
@@ -140,11 +139,11 @@ namespace BIS.P3D.ODOL
         public Vector3P BCenter { get; }
         public float BRadius { get; }
         public string[] Textures { get; }
-		internal EmbeddedMaterial[] Materials { get; }
+		public EmbeddedMaterial[] Materials { get; }
         public TrackedArray<int> PointToVertex { get; }
         public TrackedArray<int> VertexToPoint { get; }
 		internal Polygons Polygons { get; }
-		internal Section[] Sections { get; }
+		public Section[] Sections { get; }
 		internal NamedSelection[] NamedSelections { get; }
         public Tuple<string, string>[] NamedProperties { get; }
 		internal Keyframe[] Frames { get; }

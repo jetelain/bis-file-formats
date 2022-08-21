@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using BIS.Core.Streams;
 
 namespace BIS.P3D.ODOL
 {
-    public class ODOL : IReadObject
+    public class ODOL : IReadWriteObject
     {
         public int Version { get; private set; }
         public string Prefix { get; private set; }
@@ -25,7 +24,7 @@ namespace BIS.P3D.ODOL
             ReadContent(input);
         }
 
-        internal void Write(BinaryWriterEx output)
+        public void Write(BinaryWriterEx output)
         {
             output.WriteAscii("ODOL", 4);
             WriteContent(output);
