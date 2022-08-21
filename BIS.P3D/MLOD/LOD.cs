@@ -2,6 +2,7 @@
 using BIS.Core.Streams;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace BIS.P3D.MLOD
@@ -10,9 +11,9 @@ namespace BIS.P3D.MLOD
     {
         private int Flags { get; set; }
         public int Version { get; private set; }
-        public Point[] Points { get; private set; }
-        public Vector3P[] Normals { get; private set; }
-        public Face[] Faces { get; private set; }
+        public Point[] Points { get; set; }
+        public Vector3P[] Normals { get; set; }
+        public Face[] Faces { get; set; }
         public LinkedList<Tagg> Taggs { get; private set; }
         public float Resolution { get; private set; }
 
@@ -78,6 +79,7 @@ namespace BIS.P3D.MLOD
             do
             {
                 mlodTagg = Tagg.ReadTagg(input, nPoints, Faces);
+                Debug.Assert(mlodTagg.DataSize == mlodTagg.ComputeDataSize());
                 Taggs.AddLast(mlodTagg);
             }
             while (!(mlodTagg is EOFTagg));
