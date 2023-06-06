@@ -579,6 +579,7 @@ namespace System.IO.Compression
                 var r = _lzssOption.N - _lzssOption.F;
                 var stopPos = count + offset;
                 var arrayIdx = offset;
+                var mp = (r - match_position) & (_lzssOption.N - 1);
                 byte[] code_buf = new byte[17];
 
                 InitTree();  /* initialize trees */
@@ -631,8 +632,9 @@ namespace System.IO.Compression
                             }
                             else
                             {
-                                pcode_buf[code_buf_ptr++] = (byte)match_position;
-                                pcode_buf[code_buf_ptr++] = (byte)(((match_position >> 4) & 0xf0)
+                                mp = (r - match_position) & (_lzssOption.N - 1);
+                                pcode_buf[code_buf_ptr++] = (byte)mp;
+                                pcode_buf[code_buf_ptr++] = (byte)(((mp >> 4) & 0xf0)
                                                             | (match_length - (_lzssOption.THRESHOLD + 1)));  /* Send position and
                                                                                  length pair. Note match_length > THRESHOLD. */
                             }
@@ -713,10 +715,13 @@ namespace System.IO.Compression
                                 if ((i = stream.ReadByte()) == -1 || (j = stream.ReadByte()) == -1) break;
                                 i |= ((j & 0xf0) << 4);
                                 j = (j & 0x0f) + _lzssOption.THRESHOLD;
-                                for (k = 0; k <= j; k++)
+                                int ii = r - i;
+                                int jj = j + ii;
+
+                                for (; ii <= jj; ii++)
                                 {
                                     if (arrayIdx == stopPos) break;
-                                    c = ptext_buf[(i + k) & (_lzssOption.N - 1)];
+                                    c = ptext_buf[ii & (_lzssOption.N - 1)];
                                     pArray[arrayIdx++] = ptext_buf[r++] = (byte)c;
                                     r &= (_lzssOption.N - 1);
                                 }
