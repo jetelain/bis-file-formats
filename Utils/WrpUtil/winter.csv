@@ -34,14 +34,13 @@ REPLACE;ca\plants2\tree\t_quercus3s.p3d;CUP\Terrains\cup_terrains_winter_plants\
 REPLACE;ca\plants2\tree\t_salix2s.p3d;CUP\Terrains\cup_terrains_winter_plants\Trees\cup_t_salix2sW.p3d;
 REPLACE;a3\plants_f\bush\b_ficusc1s_f.p3d;CUP\Terrains\cup_terrains_winter_plants\Bushes\cup_b_corylus2sW.p3d;
 REPLACE;a3\plants_f\bush\b_neriumo2d_f.p3d;CUP\Terrains\cup_terrains_winter_plants\Bushes\cup_b_craet1W.p3d;
-REPLACE;ca\plants\les_singlestrom.p3d;CUP\Terrains\cup_terrains_winter_plants\Trees\cup_t_picea3fW.p3d;
 REPLACE;ca\plants\les_singlestrom_b.p3d;CUP\Terrains\cup_terrains_winter_plants\Trees\cup_t_picea3fW.p3d;
 REPLACE;ca\plants_e\Tree\t_AmygdalusC2s_EP1.p3d;CUP\Terrains\cup_terrains_winter_plants\Trees\cup_t_malus1sW.p3d;
 REPLACE;ca\plants_e\Tree\t_FicusB2s_EP1.p3d;CUP\Terrains\cup_terrains_winter_plants\Trees\cup_t_pyrus2sW.p3d;
 REPLACE;a3\plants_f\tree\t_PinusS1s_F.p3d;CUP\Terrains\cup_terrains_winter_plants\Trees\cup_t_pinusN1sW.p3d;
 REPLACE;a3\plants_f\tree\t_PinusS2s_b_F.p3d;CUP\Terrains\cup_terrains_winter_plants\Trees\cup_t_pinusN2sW.p3d;
 REPLACE;ca\plants\krovi_bigest.p3d;CUP\Terrains\cup_terrains_winter_plants\Bushes\cup_b_sambucusW.p3d;
-REPLACE;ca\plants_e\Tree\t_PinusS3s_EP1.p3d;CUP\Terrains\cup_terrains_winter_plants\Trees\cup_t_pinusS2fW.p3d;1
+REPLACE;ca\plants_e\Tree\t_PinusS3s_EP1.p3d;CUP\Terrains\cup_terrains_winter_plants\Trees\cup_t_pinusS2fW.p3d;
 REPLACE;ca\plants_e\Tree\t_PinusE2s_EP1.p3d;CUP\Terrains\cup_terrains_winter_plants\Trees\cup_t_pinusN2sW.p3d;
 REPLACE;a3\plants_f\Bush\b_Thistle_Thorn_Green.p3d;CUP\Terrains\cup_terrains_winter_plants\Clutter\cup_piceaW.p3d;
 REPLACE;a3\plants_f\tree\t_PinusS2s_F.p3d;CUP\Terrains\cup_terrains_winter_plants\Trees\cup_t_pinusN2sW.p3d;
@@ -69,55 +68,3 @@ REPLACE;a3\plants_f\tree\t_PopulusN3s_F.p3d;CUP\Terrains\cup_terrains_winter_pla
 REPLACE;ca\plants\jablon.p3d;CUP\Terrains\cup_terrains_winter_plants\Trees\cup_t_malus1sW.p3d;
 REPLACE;ca\plants_e\Bush\b_AmygdalusN1s_EP1.p3d;CUP\Terrains\cup_terrains_winter_plants\Bushes\cup_b_sambucusW.p3d;
 REPLACE;ca\plants_e\Tree\t_PistaciaL2s_EP1.p3d;CUP\Terrains\cup_terrains_winter_plants\Trees\cup_t_malus1sW.p3d;
-
-REPLACE;ca\rocks_e\r_tk_boulder_01_ep1.p3d;CUP\Terrains\cup_terrains_winter_objects\s_R_tk_Boulder_01_EP1.p3d;
-REPLACE;ca\rocks_e\r_tk_boulder_02_ep1.p3d;CUP\Terrains\cup_terrains_winter_objects\s_R_tk_Boulder_02_EP1.p3d;
-REPLACE;ca\rocks_e\r_tk_boulder_03_ep1.p3d;CUP\Terrains\cup_terrains_winter_objects\s_R_tk_Boulder_03_EP1.p3d;
-REPLACE;ca\rocks_e\r_tk_rock_01_ep1.p3d;CUP\Terrains\cup_terrains_winter_objects\s_R_tk_Rock_01_EP1.p3d;
-REPLACE;ca\rocks_e\r_tk_rock_02_ep1.p3d;CUP\Terrains\cup_terrains_winter_objects\s_R_tk_Rock_02_EP1.p3d;
-REPLACE;ca\rocks_e\r_tk_rock_03_ep1.p3d;CUP\Terrains\cup_terrains_winter_objects\s_R_tk_Rock_03_EP1.p3d;
-REPLACE;ca\rocks_e\r_tk_stone_01_ep1.p3d;CUP\Terrains\cup_terrains_winter_objects\s_R_tk_Stone_01_EP1.p3d;
-REPLACE;ca\rocks_e\r_tk_stone_02_ep1.p3d;CUP\Terrains\cup_terrains_winter_objects\s_R_tk_Stone_02_EP1.p3d;
-REPLACE;ca\structures\wall\wall_stone.p3d;CUP\Terrains\cup_terrains_winter_objects\s_Wall_Stone.p3d;
-REPLACE;ca\structures\wall\wall_stoned.p3d;CUP\Terrains\cup_terrains_winter_objects\s_Wall_StoneD.p3d;
-REPLACE;ca\misc3\fort_rampart.p3d;CUP\Terrains\cup_terrains_winter_objects\s_fort_rampart_ep1.p3d;
-REPLACE;ca\misc_e\fort_rampart_ep1.p3d;CUP\Terrains\cup_terrains_winter_objects\s_fort_rampart_ep1.p3d;
-
-REPLACE;ca\plants2\misc\misc_fallentree1.p3d;CUP\Terrains\cup_terrains_winter_plants\dead\cup_misc_FallenTree1W.p3d;
-REPLACE;ca\plants2\misc\misc_fallentree2.p3d;CUP\Terrains\cup_terrains_winter_plants\dead\cup_misc_FallenTree2W.p3d;
-REPLACE;ca\plants2\misc\misc_stub1.p3d;CUP\Terrains\cup_terrains_winter_plants\dead\cup_misc_stub1W.p3d;
-REPLACE;ca\plants2\misc\misc_stub2.p3d;CUP\Terrains\cup_terrains_winter_plants\dead\cup_misc_stub2W.p3d;
-REPLACE;ca\plants2\misc\misc_fallenspruce.p3d;CUP\Terrains\cup_terrains_winter_plants\dead\cup_misc_FallenSpruceW.p3d;
-
-REPLACE;ca\plants\les_dub.p3d;cup\terrains\cup_terrains_winter_plants\Trees\cup_t_fraxinus2sW.p3d;
-REPLACE;ca\plants_e2\tree\t_picea2s.p3d;CUP\Terrains\cup_terrains_winter_plants\Trees\cup_t_picea2sW.p3d;
-
-REPLACE;ca\roads\asf25.p3d;z\gtd_taunus_winter_objects\asf25.p3d;0
-REPLACE;ca\roads2\asf2_6.p3d;z\gtd_taunus_winter_objects\asf2_6.p3d;0
-REPLACE;ca\roads\asf10 25.p3d;z\gtd_taunus_winter_objects\asf10 25.p3d;0
-REPLACE;ca\roads\asf6konec.p3d;z\gtd_taunus_winter_objects\asf6konec.p3d;0
-REPLACE;ca\roads\asf12.p3d;z\gtd_taunus_winter_objects\asf12.p3d;0
-REPLACE;ca\roads_pmc\asf1_02000.p3d;z\gtd_taunus_winter_objects\asf1_02000.p3d;0
-REPLACE;ca\roads\asf6.p3d;z\gtd_taunus_winter_objects\asf6.p3d;0
-REPLACE;ca\roads_pmc\asf1_6konec.p3d;z\gtd_taunus_winter_objects\asf1_6konec.p3d;0
-REPLACE;ca\roads\asf10 100.p3d;z\gtd_taunus_winter_objects\asf10 100.p3d;0
-REPLACE;ca\roads2\asf3_6.p3d;z\gtd_taunus_winter_objects\asf3_6.p3d;0
-REPLACE;ca\roads2\asf3_25.p3d;z\gtd_taunus_winter_objects\asf3_25.p3d;0
-REPLACE;ca\roads\asf10 75.p3d;z\gtd_taunus_winter_objects\asf10 75.p3d;0
-REPLACE;ca\roads_pmc\asf1_25.p3d;z\gtd_taunus_winter_objects\asf1_25.p3d;0
-REPLACE;ca\roads_e\roads\asf1_11000.p3d;z\gtd_taunus_winter_objects\asf1_11000.p3d;0
-
-REDUCE;ca\plants_e2\plants\p_pumpkin2_summer.p3d;1
-REDUCE;ca\plants_e2\plants\p_pumpkin_summer.p3d;1
-REDUCE;ca\plants2\plant\pumpkin.p3d;1
-REDUCE;ca\plants2\plant\pumpkin2.p3d;1
-REDUCE;ca\plants_e2\plants\p_articum_summer.p3d;1
-REDUCE;ca\plants2\plant\p_articum.p3d;1
-
-REDUCE;ca\misc\seno_balik.p3d;1
-
-REDUCE;ca\plants\str dub.p3d;1
-REDUCE;ca\plants\str buk.p3d;1
-REDUCE;ca\plants\str kastan.p3d;1
-REDUCE;ca\plants\str krovisko vysoke.p3d;1
-REDUCE;ca\plants\str trnka.p3d;1
