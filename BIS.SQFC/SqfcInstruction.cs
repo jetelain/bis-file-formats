@@ -52,7 +52,7 @@ namespace BIS.SQFC
             writer.Write((byte)InstructionType);
             if (InstructionType != InstructionType.EndStatement && InstructionType != InstructionType.Push)
             {
-                Location.WriteTo(writer);
+                Location.WriteTo(writer, context);
             }
             WriteData(writer, context);
         }

@@ -28,8 +28,12 @@ namespace BIS.SQFC
                 reader.ReadUInt16());
         }
 
-        internal void WriteTo(BinaryWriterEx writer)
+        internal void WriteTo(BinaryWriterEx writer, SqfcFile context)
         {
+            if (FileIndex >= context.FileNames.Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
             writer.Write(Offset);
             writer.Write(FileIndex);
             writer.Write(Line);

@@ -18,6 +18,10 @@ namespace BIS.SQFC
 
         protected override void WriteData(BinaryWriterEx writer, SqfcFile context)
         {
+            if (ConstantIndex >= context.Constants.Count)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
             writer.Write(ConstantIndex);
         }
 

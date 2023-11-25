@@ -61,7 +61,7 @@ namespace BIS.SQFC
 
         private void ReadConstantBlock(BinaryReaderEx input)
         {
-            Constants.AddRange(SqfcConstant.ReadArray(input, this, input.ReadUInt16()));
+            Constants.AddRange(SqfcConstant.ReadRange(input, this, input.ReadUInt16()));
         }
 
         public void Write(BinaryWriterEx output)

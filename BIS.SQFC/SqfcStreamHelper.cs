@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Buffers.Binary;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using BIS.Core.Compression;
@@ -56,8 +57,13 @@ namespace BIS.SQFC
             {
                 throw new IOException($"Unexpected compression mode: {compressionMode}");
             }
-
         }
-
+        public static IEnumerable<T> ReadRange<T>(this BinaryReaderEx input, Func<BinaryReaderEx, T> readElement, int size)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                yield return readElement(input);
+            }
+        }
     }
 }

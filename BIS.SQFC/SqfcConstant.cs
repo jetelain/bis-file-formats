@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BIS.Core.Streams;
@@ -26,7 +24,7 @@ namespace BIS.SQFC
                     return new SqfcConstantString(reader.ReadSqfcString());
 
                 case ConstantType.Array:
-                    return new SqfcConstantArray(ReadArray(reader, context, reader.ReadInt32()).ToList());
+                    return new SqfcConstantArray(ReadRange(reader, context, reader.ReadInt32()).ToList());
 
                 case ConstantType.Code:
                     var contentString = reader.ReadUInt64();
@@ -39,9 +37,9 @@ namespace BIS.SQFC
             throw new IOException();
         }
 
-        internal static IEnumerable<SqfcConstant> ReadArray(BinaryReaderEx reader, SqfcFile context, int size)
+        internal static IEnumerable<SqfcConstant> ReadRange(BinaryReaderEx reader, SqfcFile context, int size)
         {
-            return reader.ReadArrayBase(r => Read(r, context), size);
+            return reader.ReadRange(r => Read(r, context), size);
         }
 
         internal void WriteTo(BinaryWriterEx writer, SqfcFile context)

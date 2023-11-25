@@ -26,8 +26,12 @@ namespace BIS.SQFC
 
         public override string ToString()
         {
-            return $"[ {string.Join(", ", Value.Select(v => v.ToString()))} ]";
+            return ToString(null);
         }
 
+        internal override string ToString(SqfcFile context)
+        {
+            return $"[ {string.Join(", ", Value.Select(v => v.ToString(context)))} ]";
+        }
     }
 }
