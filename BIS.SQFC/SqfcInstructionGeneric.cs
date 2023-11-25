@@ -1,8 +1,10 @@
-﻿using BIS.Core.Streams;
+﻿using System.Collections.Generic;
+using BIS.Core.Streams;
+using BIS.SQFC.SqfAst;
 
 namespace BIS.SQFC
 {
-    internal class SqfcInstructionGeneric : SqfcInstruction
+    internal sealed class SqfcInstructionGeneric : SqfcInstruction
     {
         public SqfcInstructionGeneric(SqfcLocation location, InstructionType type, string value)
         {
@@ -52,6 +54,38 @@ namespace BIS.SQFC
                     return $"nular {Value};";
             }
             return $"??? {Value};";
+        }
+
+        internal override void Execute(List<SqfStatement> result, Stack<SqfExpression> stack, SqfcFile context)
+        {
+            switch (InstructionType)
+            {
+                case InstructionType.GetVariable:
+                    stack.Push(new SqfGetVariable(Location.ToSqf(context), Value));
+                    break;
+
+                case InstructionType.AssignTo:
+                    result.Add(new SqfAssignGlobal(Location.ToSqf(context), Value, stack.Pop()));
+                    break;
+
+                case InstructionType.AssignToLocal:
+                    result.Add(new SqfAssignLocal(Location.ToSqf(context), Value, stack.Pop()));
+                    break;
+
+                case InstructionType.CallUnary:
+                    stack.Push(new SqfUnary(Location.ToSqf(context), Value, stack.Pop()));
+                    break;
+
+                case InstructionType.CallBinary:
+                    var right = stack.Pop();
+                    var left = stack.Pop();
+                    stack.Push(new SqfBinary(Location.ToSqf(context), Value, left, right));
+                    break;
+
+                case InstructionType.CallNular:
+                    stack.Push(new SqfNular(Location.ToSqf(context), Value));
+                    break;
+            }
         }
     }
 }

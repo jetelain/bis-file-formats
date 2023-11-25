@@ -1,5 +1,6 @@
 ﻿using System;
 using BIS.Core.Streams;
+using BIS.SQFC.SqfAst;
 
 namespace BIS.SQFC
 {
@@ -28,8 +29,12 @@ namespace BIS.SQFC
                 reader.ReadUInt16());
         }
 
-        internal void WriteTo(BinaryWriterEx writer)
+        internal void WriteTo(BinaryWriterEx writer, SqfcFile context)
         {
+            if (FileIndex >= context.FileNames.Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
             writer.Write(Offset);
             writer.Write(FileIndex);
             writer.Write(Line);
@@ -47,6 +52,15 @@ namespace BIS.SQFC
                 return ToString();
             }
             return $"{file.FileNames[FileIndex]}@{Line}/{Offset}";
+        }
+
+        internal SqfLocation ToSqf(SqfcFile file)
+        {
+            if ( this == None)
+            {
+                return SqfLocation.None;
+            }
+            return new SqfLocation(file.FileNames[FileIndex], Line, Offset);
         }
     }
 }

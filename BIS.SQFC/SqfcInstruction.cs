@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using BIS.Core.Streams;
+using BIS.SQFC.SqfAst;
 
 namespace BIS.SQFC
 {
@@ -52,7 +54,7 @@ namespace BIS.SQFC
             writer.Write((byte)InstructionType);
             if (InstructionType != InstructionType.EndStatement && InstructionType != InstructionType.Push)
             {
-                Location.WriteTo(writer);
+                Location.WriteTo(writer, context);
             }
             WriteData(writer, context);
         }
@@ -63,5 +65,7 @@ namespace BIS.SQFC
         {
             return ToString();
         }
+
+        internal abstract void Execute(List<SqfStatement> result, Stack<SqfExpression> stack, SqfcFile context);
     }
 }

@@ -1,8 +1,10 @@
-﻿using BIS.Core.Streams;
+﻿using System.Collections.Generic;
+using BIS.Core.Streams;
+using BIS.SQFC.SqfAst;
 
 namespace BIS.SQFC
 {
-    internal class SqfcInstructionEndStatement : SqfcInstruction
+    internal sealed class SqfcInstructionEndStatement : SqfcInstruction
     {
         public override InstructionType InstructionType => InstructionType.EndStatement;
 
@@ -16,6 +18,18 @@ namespace BIS.SQFC
         public override string ToString()
         {
             return "endStatement;";
+        }
+
+        internal override void Execute(List<SqfStatement> result, Stack<SqfExpression> stack, SqfcFile context)
+        {
+            if (stack.Count > 0 )
+            {
+                foreach(var item in stack)
+                {
+                    result.Add(new SqfEvaluateStatement(item));
+                }
+                stack.Clear();
+            }
         }
     }
 }

@@ -1,20 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using BIS.Core.Streams;
+using BIS.SQFC.SqfAst;
 
 namespace BIS.SQFC
 {
-    public class SqfcFile : IReadWriteObject
+    public sealed class SqfcFile : IReadWriteObject
     {
         public int Version { get; set; }
 
-        public List<SqfcConstant> Constants { get; } = new List<SqfcConstant>();
+        internal List<SqfcConstant> Constants { get; } = new List<SqfcConstant>();
 
-        public List<string> CommandNameDirectory { get; } = new List<string>();
+        internal List<string> CommandNameDirectory { get; } = new List<string>();
 
-        public List<string> FileNames { get; } = new List<string>();
+        internal List<string> FileNames { get; } = new List<string>();
 
-        public ulong CodeIndex { get; set; }
+        internal ulong CodeIndex { get; set; }
 
         public void Read(BinaryReaderEx input)
         {
@@ -24,11 +27,11 @@ namespace BIS.SQFC
 
             Version = input.ReadInt32();
 
-            while(!input.HasReachedEnd)
+            while (!input.HasReachedEnd)
             {
                 var blockType = (SqfcFileBlockType)input.ReadByte();
-                
-                switch(blockType)
+
+                switch (blockType)
                 {
                     case SqfcFileBlockType.Constant:
                         ReadConstantBlock(input);
@@ -61,7 +64,7 @@ namespace BIS.SQFC
 
         private void ReadConstantBlock(BinaryReaderEx input)
         {
-            Constants.AddRange(SqfcConstant.ReadArray(input, this, input.ReadUInt16()));
+            Constants.AddRange(SqfcConstant.ReadRange(input, this, input.ReadUInt16()));
         }
 
         public void Write(BinaryWriterEx output)
@@ -92,9 +95,61 @@ namespace BIS.SQFC
             output.Write((ulong)CodeIndex);
         }
 
+        public void CompileSqf(SqfCodeBlock sqf)
+        {
+            Version = 1;
+            CommandNameDirectory.Clear();
+            Constants.Clear();
+            FileNames.Clear();
+            CodeIndex = MakeConstant(sqf.CreateRootConstant(this));
+        }
+
         public override string ToString()
         {
             return "exec " + Constants[(int)CodeIndex].ToString(this);
+        }
+
+        public SqfCodeBlock ToSqf()
+        {
+            return ((SqfcConstantCode)Constants[(int)CodeIndex]).ToRootExpression(this);
+        }
+
+        internal ushort MakeConstantString(string value)
+        {
+            return MakeConstant(() => new SqfcConstantString(value), c => c.Value == value);
+        }
+
+        internal ushort MakeConstantScalar(float value)
+        {
+            return MakeConstant(() => new SqfcConstantScalar(value), c => c.Value == value);
+        }
+
+        internal ushort MakeConstantBoolean(bool value)
+        {
+            return MakeConstant(() => new SqfcConstantBoolean(value), c => c.Value == value);
+        }
+        internal ushort MakeConstantNular(string name)
+        {
+            return MakeConstant(() => new SqfcConstantNularCommand(name), c => c.Value == name);
+        }
+
+        private ushort MakeConstant<TConstant>(Func<TConstant> create, Func<TConstant, bool> isMatch) 
+            where TConstant: SqfcConstant
+        {
+            var entry = Constants.OfType<TConstant>().FirstOrDefault(isMatch);
+            if (entry == null)
+            {
+                return (ushort)Constants.IndexOf(entry);
+            }
+            entry = create();
+            return MakeConstant(entry);
+        }
+
+        internal ushort MakeConstant(SqfcConstant entry)
+        {
+            var index = Constants.Count;
+            Constants.Add(entry);
+            return (ushort)index;
         }
     }
 }

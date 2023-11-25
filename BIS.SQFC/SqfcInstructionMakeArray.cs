@@ -1,8 +1,10 @@
-﻿using BIS.Core.Streams;
+﻿using System.Collections.Generic;
+using BIS.Core.Streams;
+using BIS.SQFC.SqfAst;
 
 namespace BIS.SQFC
 {
-    internal class SqfcInstructionMakeArray : SqfcInstruction
+    internal sealed class SqfcInstructionMakeArray : SqfcInstruction
     {
         public SqfcInstructionMakeArray(SqfcLocation location, ushort arraySize)
         {
@@ -24,6 +26,16 @@ namespace BIS.SQFC
         public override string ToString()
         {
             return $"makeArray {ArraySize};";
+        }
+
+        internal override void Execute(List<SqfStatement> result, Stack<SqfExpression> stack, SqfcFile context)
+        {
+            var items = new SqfExpression[ArraySize];
+            for (int i = ArraySize-1; i >= 0; i--)
+            {
+                items[i] = stack.Pop();
+            }
+            stack.Push(new SqfMakeArray(Location.ToSqf(context), items));
         }
     }
 }
