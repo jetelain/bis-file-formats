@@ -1,9 +1,10 @@
 ﻿using System.Globalization;
 using BIS.Core.Streams;
+using BIS.SQFC.SqfAst;
 
 namespace BIS.SQFC
 {
-    internal class SqfcConstantScalar : SqfcConstant
+    internal sealed class SqfcConstantScalar : SqfcConstant
     {
         public SqfcConstantScalar(float v)
         {
@@ -22,6 +23,11 @@ namespace BIS.SQFC
         public override string ToString()
         {
             return Value.ToString(CultureInfo.InvariantCulture);
+        }
+
+        internal override SqfExpression ToExpression(SqfcFile context)
+        {
+            return new SqfScalar(Value);
         }
     }
 }

@@ -1,8 +1,9 @@
 ﻿using BIS.Core.Streams;
+using BIS.SQFC.SqfAst;
 
 namespace BIS.SQFC
 {
-    internal class SqfcConstantString : SqfcConstant
+    internal sealed class SqfcConstantString : SqfcConstant
     {
         public SqfcConstantString(string v)
         {
@@ -21,6 +22,10 @@ namespace BIS.SQFC
         public override string ToString()
         {
             return $"\"{Value.Replace("\"", "\"\"")}\"";
+        }
+        internal override SqfExpression ToExpression(SqfcFile context)
+        {
+            return new SqfString(Value);
         }
     }
 }

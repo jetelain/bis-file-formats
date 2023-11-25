@@ -2,10 +2,11 @@
 using System.IO;
 using System.Linq;
 using BIS.Core.Streams;
+using BIS.SQFC.SqfAst;
 
 namespace BIS.SQFC
 {
-    public abstract class SqfcConstant
+    internal abstract class SqfcConstant
     {
         public abstract ConstantType ConstantType { get; }
 
@@ -54,5 +55,7 @@ namespace BIS.SQFC
         {
             return ToString();
         }
+
+        internal abstract SqfExpression ToExpression(SqfcFile context);
     }
 }

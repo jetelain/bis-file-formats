@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using BIS.Core.Streams;
+using BIS.SQFC.SqfAst;
 
 namespace BIS.SQFC
 {
-    internal class SqfcConstantCode : SqfcConstant
+    internal sealed class SqfcConstantCode : SqfcConstant
     {
+        internal const ulong NoSourceCode = ulong.MaxValue;
+
         public SqfcConstantCode(ulong contentString, IReadOnlyList<SqfcInstruction> sqfcInstructions)
         {
             ContentString = contentString;
@@ -40,16 +42,45 @@ namespace BIS.SQFC
             sb.AppendLine("{");
             foreach (var instruction in Instructions)
             {
-                if (instruction.Location != SqfcLocation.None)
-                {
-                    sb.Append("  // ");
-                    sb.AppendLine(instruction.Location.ToString(context));
-                }
+                //if (instruction.Location != SqfcLocation.None)
+                //{
+                //    sb.Append("  // ");
+                //    sb.AppendLine(instruction.Location.ToString(context));
+                //}
                 sb.Append("  ");
                 sb.AppendLine(instruction.ToString(context));
             }
             sb.Append("}");
             return sb.ToString();
+        }
+
+        internal override SqfExpression ToExpression(SqfcFile context)
+        {
+            return new SqfCodeBlock(Decompile(context));
+        }
+
+        private List<SqfStatement> Decompile(SqfcFile context)
+        {
+            var result = new List<SqfStatement>();
+            var stack = new Stack<SqfExpression>();
+            foreach (var instruction in Instructions)
+            {
+                instruction.Execute(result, stack, context);
+            }
+            if (stack.Count > 0)
+            {
+                foreach (var item in stack)
+                {
+                    result.Add(new SqfResult(item));
+                }
+            }
+
+            return result;
+        }
+
+        internal SqfCodeBlock ToRootExpression(SqfcFile context)
+        {
+            return new SqfCodeBlock(Decompile(context), (context.Constants[(int)ContentString] as SqfcConstantString)?.Value ?? string.Empty);
         }
     }
 }

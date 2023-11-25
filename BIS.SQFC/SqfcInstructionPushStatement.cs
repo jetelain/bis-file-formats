@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using BIS.Core.Streams;
+using BIS.SQFC.SqfAst;
 
 namespace BIS.SQFC
 {
-    internal class SqfcInstructionPushStatement : SqfcInstruction
+    internal sealed class SqfcInstructionPushStatement : SqfcInstruction
     {
         public SqfcInstructionPushStatement(ushort constantIndex)
         {
@@ -37,6 +39,11 @@ namespace BIS.SQFC
                 return ToString();
             }
             return $"push {context.Constants[ConstantIndex].ToString(context).Replace(Environment.NewLine, Environment.NewLine + "  ")};";
+        }
+
+        internal override void Execute(List<SqfStatement> result, Stack<SqfExpression> stack, SqfcFile context)
+        {
+            stack.Push(context.Constants[ConstantIndex].ToExpression(context));
         }
     }
 }

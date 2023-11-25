@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BIS.Core.Streams;
+using BIS.SQFC.SqfAst;
 
 namespace BIS.SQFC
 {
-    internal class SqfcConstantArray : SqfcConstant
+    internal sealed class SqfcConstantArray : SqfcConstant
     {
         public SqfcConstantArray(IReadOnlyList<SqfcConstant> value)
         {
@@ -32,6 +33,11 @@ namespace BIS.SQFC
         internal override string ToString(SqfcFile context)
         {
             return $"[ {string.Join(", ", Value.Select(v => v.ToString(context)))} ]";
+        }
+
+        internal override SqfExpression ToExpression(SqfcFile context)
+        {
+            return new SqfMakeArray(SqfLocation.None, Value.Select(i => i.ToExpression(context)).ToList());
         }
     }
 }

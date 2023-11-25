@@ -1,5 +1,6 @@
 ﻿using System;
 using BIS.Core.Streams;
+using BIS.SQFC.SqfAst;
 
 namespace BIS.SQFC
 {
@@ -51,6 +52,15 @@ namespace BIS.SQFC
                 return ToString();
             }
             return $"{file.FileNames[FileIndex]}@{Line}/{Offset}";
+        }
+
+        internal SqfLocation ToSqf(SqfcFile file)
+        {
+            if ( this == None)
+            {
+                return SqfLocation.None;
+            }
+            return new SqfLocation(file.FileNames[FileIndex], Line, Offset);
         }
     }
 }
