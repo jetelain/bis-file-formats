@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -67,7 +68,7 @@ namespace BIS.Core.Streams
             WriteArray(array, (w, f) => w.Write(f));
         }
 
-        public void WriteArrayBase<T>(T[] array, Action<BinaryWriterEx, T> write)
+        public void WriteArrayBase<T>(IEnumerable<T> array, Action<BinaryWriterEx, T> write)
         {
             foreach (var item in array)
             {
