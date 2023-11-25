@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers.Binary;
 using System.IO;
 using System.Text;
 using BIS.Core.Compression;
@@ -11,16 +12,17 @@ namespace BIS.SQFC
         internal static string ReadSqfcString(this BinaryReaderEx reader)
         {
             var bytes = new byte[4];
-            reader.Read(bytes, 1, 3);
-            var length = BitConverter.ToInt32(bytes, 0);
+            reader.Read(bytes, 0, 3);
+            var length = BinaryPrimitives.ReadInt32LittleEndian(bytes);
             return Encoding.UTF8.GetString(reader.ReadBytes(length));
         }
 
         internal static void WriteSqfcString(this BinaryWriterEx writer, string str)
         {
             var utf8 = Encoding.UTF8.GetBytes(str);
-            var bytes = BitConverter.GetBytes(utf8.Length);
-            writer.Write(bytes, 1, 3);
+            var bytes = new byte[4];
+            BinaryPrimitives.WriteInt32LittleEndian(bytes, utf8.Length);
+            writer.Write(bytes, 0, 3);
             writer.Write(utf8);
         }
 

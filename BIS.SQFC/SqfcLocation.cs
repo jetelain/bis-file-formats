@@ -34,5 +34,19 @@ namespace BIS.SQFC
             writer.Write(FileIndex);
             writer.Write(Line);
         }
+
+        public override string ToString()
+        {
+            return $"File#{FileIndex}@{Line}/{Offset}";
+        }
+
+        public string ToString(SqfcFile file)
+        {
+            if (file == null)
+            {
+                return ToString();
+            }
+            return $"{file.FileNames[FileIndex]}@{Line}/{Offset}";
+        }
     }
 }

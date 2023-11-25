@@ -1,4 +1,5 @@
-﻿using BIS.Core.Streams;
+﻿using System;
+using BIS.Core.Streams;
 
 namespace BIS.SQFC
 {
@@ -31,7 +32,7 @@ namespace BIS.SQFC
             {
                 return ToString();
             }
-            return $"push {context.Constants[ConstantIndex].ToString(context)};";
+            return $"push {context.Constants[ConstantIndex].ToString(context).Replace(Environment.NewLine, Environment.NewLine + "  ")};";
         }
     }
 }

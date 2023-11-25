@@ -31,7 +31,27 @@ namespace BIS.SQFC
 
         public override string ToString()
         {
-            return Value + ";";
+            switch(InstructionType)
+            {
+                case InstructionType.GetVariable:
+                    return $"get {Value};";
+
+                case InstructionType.AssignTo:
+                    return $"setGlobal {Value};";
+
+                case InstructionType.AssignToLocal:
+                    return $"setPrivate {Value};";
+
+                case InstructionType.CallUnary:
+                    return $"unary {Value};";
+
+                case InstructionType.CallBinary:
+                    return $"binary {Value};";
+
+                case InstructionType.CallNular:
+                    return $"nular {Value};";
+            }
+            return $"??? {Value};";
         }
     }
 }

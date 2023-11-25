@@ -94,7 +94,7 @@ namespace BIS.SQFC
 
         public override string ToString()
         {
-            return Constants[(int)CodeIndex].ToString(this);
+            return "exec " + Constants[(int)CodeIndex].ToString(this);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using BIS.Core.Streams;
 
@@ -39,10 +40,15 @@ namespace BIS.SQFC
             sb.AppendLine("{");
             foreach (var instruction in Instructions)
             {
+                if (instruction.Location != SqfcLocation.None)
+                {
+                    sb.Append("  // ");
+                    sb.AppendLine(instruction.Location.ToString(context));
+                }
                 sb.Append("  ");
                 sb.AppendLine(instruction.ToString(context));
             }
-            sb.AppendLine("}");
+            sb.Append("}");
             return sb.ToString();
         }
     }

@@ -15,7 +15,7 @@ namespace BIS.SQFC
 
         public override string ToString()
         {
-            return "end;";
+            return "endStatement;";
         }
     }
 }
