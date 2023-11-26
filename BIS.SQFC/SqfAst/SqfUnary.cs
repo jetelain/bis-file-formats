@@ -22,6 +22,8 @@ namespace BIS.SQFC.SqfAst
 
         public override int Precedence => 10;
 
+        public override SqfValueType ResultType => SqfValueType.Unknown;
+
         public override string ToString()
         {
             if (Name == "if")
@@ -35,9 +37,16 @@ namespace BIS.SQFC.SqfAst
             return sb.ToString();
         }
 
-        internal override void Compile(SqfcFile context, List<SqfcInstruction> instructions)
+        internal override void Compile(SqfcFile context, List<SqfcInstruction> instructions, SqfArraySafety mutationSafety = SqfArraySafety.MightBeMutated)
         {
-            Argument.Compile(context, instructions);
+            context.RegisterCommand(Name);
+
+            var safety = SqfArraySafety.ConstSafeNotNested;
+            if (Name == "+")
+            {
+                safety = SqfArraySafety.ConstSafe;
+            }
+            Argument.Compile(context, instructions, safety);
             instructions.Add(new SqfcInstructionGeneric(Location.Compile(context), InstructionType.CallUnary, Name));
         }
     }

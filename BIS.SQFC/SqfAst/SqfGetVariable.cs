@@ -18,13 +18,16 @@ namespace BIS.SQFC.SqfAst
 
         public override int Precedence => 11;
 
+        public override SqfValueType ResultType => SqfValueType.Unknown;
+
         public override string ToString()
         {
             return Name;
         }
 
-        internal override void Compile(SqfcFile context, List<SqfcInstruction> instructions)
+        internal override void Compile(SqfcFile context, List<SqfcInstruction> instructions, SqfArraySafety mutationSafety = SqfArraySafety.MightBeMutated)
         {
+            context.RegisterCommand(Name);
             instructions.Add(new SqfcInstructionGeneric(Location.Compile(context), InstructionType.GetVariable, Name));
         }
     }

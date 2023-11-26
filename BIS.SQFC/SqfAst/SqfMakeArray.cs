@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BIS.SQFC.SqfAst
@@ -19,16 +20,23 @@ namespace BIS.SQFC.SqfAst
 
         public override int Precedence => 11;
 
+        public override SqfValueType ResultType => SqfValueType.Array;
+
         public override string ToString()
         {
             return $"[ {string.Join(", ", Items.Select(v => v.ToString()))} ]";
         }
 
-        internal override void Compile(SqfcFile context, List<SqfcInstruction> instructions)
+        internal override void Compile(SqfcFile context, List<SqfcInstruction> instructions, SqfArraySafety mutationSafety = SqfArraySafety.MightBeMutated)
         {
             if (IsConstant)
             {
                 instructions.Add(new SqfcInstructionPushStatement(context.MakeConstant(CreateConstantImpl(context))));
+
+                if (mutationSafety == SqfArraySafety.MightBeMutated || (mutationSafety == SqfArraySafety.ConstSafeNotNested && HasNestedArray()))
+                {
+                    instructions.Add(new SqfcInstructionGeneric(Location.Compile(context), InstructionType.CallUnary, "+"));
+                }
             }
             else
             {
@@ -38,6 +46,11 @@ namespace BIS.SQFC.SqfAst
                 }
                 instructions.Add(new SqfcInstructionMakeArray(Location.Compile(context), (ushort)Items.Count));
             }
+        }
+
+        private bool HasNestedArray()
+        {
+            return Items.Any(n => (n.ResultType & SqfValueType.Array) != 0);
         }
 
         private SqfcConstantArray CreateConstantImpl(SqfcFile context)

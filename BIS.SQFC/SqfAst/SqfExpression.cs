@@ -10,9 +10,11 @@ namespace BIS.SQFC.SqfAst
 
         public abstract bool IsConstant { get; }
 
-        internal abstract void Compile(SqfcFile context, List<SqfcInstruction> instructions);
+        internal abstract void Compile(SqfcFile context, List<SqfcInstruction> instructions, SqfArraySafety mutationSafety = SqfArraySafety.MightBeMutated);
 
         public abstract int Precedence { get; }
+
+        public abstract SqfValueType ResultType { get; }
 
         internal virtual SqfcConstant CreateConstant(SqfcFile context)
         {

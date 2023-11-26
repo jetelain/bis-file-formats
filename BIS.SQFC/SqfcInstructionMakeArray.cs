@@ -37,5 +37,15 @@ namespace BIS.SQFC
             }
             stack.Push(new SqfMakeArray(Location.ToSqf(context), items));
         }
+
+        public override bool Equals(SqfcInstruction other)
+        {
+            return other is SqfcInstructionMakeArray generic && generic.ArraySize == ArraySize && generic.Location.Equals(Location);
+        }
+
+        public override int GetHashCode()
+        {
+            return ArraySize.GetHashCode();
+        }
     }
 }

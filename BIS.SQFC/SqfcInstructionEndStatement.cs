@@ -31,5 +31,15 @@ namespace BIS.SQFC
                 stack.Clear();
             }
         }
+
+        public override bool Equals(SqfcInstruction other)
+        {
+            return other is SqfcInstructionEndStatement;
+        }
+
+        public override int GetHashCode()
+        {
+            return 0;
+        }
     }
 }

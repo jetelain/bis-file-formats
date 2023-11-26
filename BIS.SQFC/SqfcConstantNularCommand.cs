@@ -47,5 +47,15 @@ namespace BIS.SQFC
         {
             return new SqfNular(SqfLocation.None, Value);
         }
+
+        public override bool Equals(SqfcConstant other)
+        {
+            return other is SqfcConstantNularCommand nular && nular.Value == Value;
+        }
+
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode();
+        }
     }
 }

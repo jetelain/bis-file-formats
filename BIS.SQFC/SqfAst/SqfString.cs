@@ -17,12 +17,14 @@ namespace BIS.SQFC.SqfAst
 
         public override int Precedence => 11;
 
+        public override SqfValueType ResultType => SqfValueType.String;
+
         public override string ToString()
         {
             return $"\"{Value.Replace("\"", "\"\"")}\"";
         }
 
-        internal override void Compile(SqfcFile context, List<SqfcInstruction> instructions)
+        internal override void Compile(SqfcFile context, List<SqfcInstruction> instructions, SqfArraySafety mutationSafety = SqfArraySafety.MightBeMutated)
         {
             instructions.Add(new SqfcInstructionPushStatement(context.MakeConstantString(Value)));
         }

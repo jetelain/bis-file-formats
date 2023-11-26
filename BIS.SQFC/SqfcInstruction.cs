@@ -6,7 +6,7 @@ using BIS.SQFC.SqfAst;
 
 namespace BIS.SQFC
 {
-    internal abstract class SqfcInstruction
+    internal abstract class SqfcInstruction : IEquatable<SqfcInstruction>
     {
         public abstract InstructionType InstructionType { get; }
 
@@ -67,5 +67,14 @@ namespace BIS.SQFC
         }
 
         internal abstract void Execute(List<SqfStatement> result, Stack<SqfExpression> stack, SqfcFile context);
+
+        public abstract bool Equals(SqfcInstruction other);
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as SqfcInstruction);
+        }
+
+        public override abstract int GetHashCode();
     }
 }

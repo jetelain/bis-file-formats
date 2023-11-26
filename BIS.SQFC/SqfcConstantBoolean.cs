@@ -28,5 +28,15 @@ namespace BIS.SQFC
         {
             return new SqfBoolean(Value);
         }
+
+        public override bool Equals(SqfcConstant other)
+        {
+            return other is SqfcConstantBoolean boolean && boolean.Value == Value;
+        }
+
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode();
+        }
     }
 }

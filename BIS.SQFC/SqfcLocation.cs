@@ -4,7 +4,7 @@ using BIS.SQFC.SqfAst;
 
 namespace BIS.SQFC
 {
-    internal class SqfcLocation
+    internal class SqfcLocation : IEquatable<SqfcLocation>
     {
         public SqfcLocation(uint offset, byte fileIndex, ushort line)
         {
@@ -61,6 +61,21 @@ namespace BIS.SQFC
                 return SqfLocation.None;
             }
             return new SqfLocation(file.FileNames[FileIndex], Line, Offset);
+        }
+
+        public bool Equals(SqfcLocation other)
+        {
+            return other != null && other.Line == Line && other.Offset == Offset && other.FileIndex == FileIndex;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as SqfcLocation);
+        }
+
+        public override int GetHashCode()
+        {
+            return Offset.GetHashCode();
         }
     }
 }

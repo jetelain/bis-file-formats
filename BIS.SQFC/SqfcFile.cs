@@ -106,7 +106,7 @@ namespace BIS.SQFC
 
         public override string ToString()
         {
-            return "exec " + Constants[(int)CodeIndex].ToString(this);
+            return Constants[(int)CodeIndex].ToString(this);
         }
 
         public SqfCodeBlock ToSqf()
@@ -116,40 +116,40 @@ namespace BIS.SQFC
 
         internal ushort MakeConstantString(string value)
         {
-            return MakeConstant(() => new SqfcConstantString(value), c => c.Value == value);
+            return MakeConstant(new SqfcConstantString(value));
         }
 
         internal ushort MakeConstantScalar(float value)
         {
-            return MakeConstant(() => new SqfcConstantScalar(value), c => c.Value == value);
+            return MakeConstant(new SqfcConstantScalar(value));
         }
 
         internal ushort MakeConstantBoolean(bool value)
         {
-            return MakeConstant(() => new SqfcConstantBoolean(value), c => c.Value == value);
+            return MakeConstant(new SqfcConstantBoolean(value));
         }
         internal ushort MakeConstantNular(string name)
         {
-            return MakeConstant(() => new SqfcConstantNularCommand(name), c => c.Value == name);
-        }
-
-        private ushort MakeConstant<TConstant>(Func<TConstant> create, Func<TConstant, bool> isMatch) 
-            where TConstant: SqfcConstant
-        {
-            var entry = Constants.OfType<TConstant>().FirstOrDefault(isMatch);
-            if (entry == null)
-            {
-                return (ushort)Constants.IndexOf(entry);
-            }
-            entry = create();
-            return MakeConstant(entry);
+            return MakeConstant(new SqfcConstantNularCommand(name));
         }
 
         internal ushort MakeConstant(SqfcConstant entry)
         {
-            var index = Constants.Count;
-            Constants.Add(entry);
+            var index = Constants.IndexOf(entry);
+            if (index == -1)
+            {
+                index = Constants.Count;
+                Constants.Add(entry);
+            }
             return (ushort)index;
+        }
+
+        internal void RegisterCommand(string name)
+        {
+            if (!CommandNameDirectory.Contains(name))
+            {
+                CommandNameDirectory.Add(name);
+            }
         }
     }
 }

@@ -25,6 +25,8 @@ namespace BIS.SQFC.SqfAst
 
         public override int Precedence => GetPrecedence(Name);
 
+        public override SqfValueType ResultType => SqfValueType.Unknown;
+
         public override string ToString()
         {
             if (Name == "then")
@@ -44,10 +46,11 @@ namespace BIS.SQFC.SqfAst
             return sb.ToString();
         }
 
-        internal override void Compile(SqfcFile context, List<SqfcInstruction> instructions)
+        internal override void Compile(SqfcFile context, List<SqfcInstruction> instructions, SqfArraySafety mutationSafety)
         {
-            Left.Compile(context, instructions);
-            Right.Compile(context, instructions);
+            context.RegisterCommand(Name);
+            Left.Compile(context, instructions, SqfArraySafety.ConstSafeNotNested);
+            Right.Compile(context, instructions, SqfArraySafety.ConstSafeNotNested);
             instructions.Add(new SqfcInstructionGeneric(Location.Compile(context), InstructionType.CallBinary, Name));
         }
 

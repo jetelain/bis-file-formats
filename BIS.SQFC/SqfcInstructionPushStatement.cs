@@ -45,5 +45,15 @@ namespace BIS.SQFC
         {
             stack.Push(context.Constants[ConstantIndex].ToExpression(context));
         }
+
+        public override bool Equals(SqfcInstruction other)
+        {
+            return other is SqfcInstructionPushStatement push && push.ConstantIndex == ConstantIndex && push.Location.Equals(Location);
+        }
+
+        public override int GetHashCode()
+        {
+            return ConstantIndex.GetHashCode();
+        }
     }
 }

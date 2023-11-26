@@ -24,6 +24,7 @@ namespace BIS.SQFC.SqfAst
 
         internal override void Compile(SqfcFile context, List<SqfcInstruction> instructions)
         {
+            context.RegisterCommand(Name);
             Value.Compile(context, instructions);
             instructions.Add(new SqfcInstructionGeneric(Location.Compile(context), InstructionType.AssignToLocal, Name));
         }

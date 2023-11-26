@@ -18,12 +18,14 @@ namespace BIS.SQFC.SqfAst
 
         public override int Precedence => 11;
 
+        public override SqfValueType ResultType => SqfValueType.Number;
+
         public override string ToString()
         {
             return Value.ToString(CultureInfo.InvariantCulture);
         }
 
-        internal override void Compile(SqfcFile context, List<SqfcInstruction> instructions)
+        internal override void Compile(SqfcFile context, List<SqfcInstruction> instructions, SqfArraySafety mutationSafety = SqfArraySafety.MightBeMutated)
         {
             instructions.Add(new SqfcInstructionPushStatement(context.MakeConstantScalar(Value)));
         }

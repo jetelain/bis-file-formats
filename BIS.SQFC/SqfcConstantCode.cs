@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using BIS.Core.Streams;
 using BIS.SQFC.SqfAst;
@@ -81,6 +83,20 @@ namespace BIS.SQFC
         internal SqfCodeBlock ToRootExpression(SqfcFile context)
         {
             return new SqfCodeBlock(Decompile(context), (context.Constants[(int)ContentString] as SqfcConstantString)?.Value ?? string.Empty);
+        }
+
+        public override bool Equals(SqfcConstant other)
+        {
+            if ( other is SqfcConstantCode code)
+            {
+                return other == this || (Instructions.Count == code.Instructions.Count && Instructions.SequenceEqual(code.Instructions));
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Instructions.Count;
         }
     }
 }

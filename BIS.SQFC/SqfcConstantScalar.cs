@@ -29,5 +29,14 @@ namespace BIS.SQFC
         {
             return new SqfScalar(Value);
         }
+
+        public override bool Equals(SqfcConstant other)
+        {
+            return other is SqfcConstantScalar number && number.Value == Value;
+        }
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode();
+        }
     }
 }

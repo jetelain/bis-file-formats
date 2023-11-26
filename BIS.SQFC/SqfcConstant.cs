@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BIS.Core.Streams;
@@ -6,7 +7,7 @@ using BIS.SQFC.SqfAst;
 
 namespace BIS.SQFC
 {
-    internal abstract class SqfcConstant
+    internal abstract class SqfcConstant : IEquatable<SqfcConstant>
     {
         public abstract ConstantType ConstantType { get; }
 
@@ -57,5 +58,15 @@ namespace BIS.SQFC
         }
 
         internal abstract SqfExpression ToExpression(SqfcFile context);
+
+        public abstract bool Equals(SqfcConstant other);
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as SqfcConstant);
+        }
+
+        public override abstract int GetHashCode();
+
     }
 }

@@ -23,6 +23,8 @@ namespace BIS.SQFC.SqfAst
 
         public override int Precedence => 11;
 
+        public override SqfValueType ResultType => SqfValueType.Code;
+
         public override string ToString()
         {
             var sb = new StringBuilder();
@@ -36,7 +38,7 @@ namespace BIS.SQFC.SqfAst
             return sb.ToString();
         }
 
-        internal override void Compile(SqfcFile context, List<SqfcInstruction> instructions)
+        internal override void Compile(SqfcFile context, List<SqfcInstruction> instructions, SqfArraySafety mutationSafety = SqfArraySafety.MightBeMutated)
         {
             instructions.Add(new SqfcInstructionPushStatement(context.MakeConstant(CreateConstant(context))));
         }

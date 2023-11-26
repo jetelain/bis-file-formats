@@ -39,5 +39,19 @@ namespace BIS.SQFC
         {
             return new SqfMakeArray(SqfLocation.None, Value.Select(i => i.ToExpression(context)).ToList());
         }
+
+        public override bool Equals(SqfcConstant other)
+        {
+            if (other is SqfcConstantArray array)
+            {
+                return other == this || (Value.Count == array.Value.Count && Value.SequenceEqual(array.Value));
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Value.Count;
+        }
     }
 }

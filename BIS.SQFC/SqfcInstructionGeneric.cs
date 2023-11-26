@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BIS.Core.Streams;
 using BIS.SQFC.SqfAst;
 
@@ -23,7 +24,12 @@ namespace BIS.SQFC
         {
             if (context.CommandNameDirectory.Count > 0)
             {
-                writer.Write((ushort)context.CommandNameDirectory.IndexOf(Value));
+                var index = context.CommandNameDirectory.IndexOf(Value);
+                if (index == -1)
+                {
+                    throw new InvalidOperationException();
+                }
+                writer.Write((ushort)index);
             }
             else
             {
@@ -86,6 +92,16 @@ namespace BIS.SQFC
                     stack.Push(new SqfNular(Location.ToSqf(context), Value));
                     break;
             }
+        }
+
+        public override bool Equals(SqfcInstruction other)
+        {
+            return other is SqfcInstructionGeneric generic && generic.Value == Value && generic.InstructionType == InstructionType && generic.Location.Equals(Location);
+        }
+
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode() ^ InstructionType.GetHashCode();
         }
     }
 }
