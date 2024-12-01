@@ -30,7 +30,7 @@ namespace BIS.P3D.ODOL
             WriteContent(output);
         }
 
-        internal void ReadHeaderOnly(BinaryReaderEx input)
+        internal float[] ReadHeaderOnly(BinaryReaderEx input)
         {
             Version = input.ReadInt32();
             input.Version = Version;
@@ -43,6 +43,17 @@ namespace BIS.P3D.ODOL
             {
                 input.UseCompressionFlag = true;
             }
+
+            if (Version >= 75)
+            {
+                var enc1 = input.ReadUInt32();
+                var enc2 = input.ReadUInt32();
+                if (enc1 != 0 || enc2 != 0)
+                {
+                    throw new Exception("This P3D is encrypted. It cannot be read.");
+                }
+            }
+
             if (Version >= 59)
             {
                 AppID = input.ReadUInt32();
@@ -58,36 +69,15 @@ namespace BIS.P3D.ODOL
             Lods = new LOD[noOfLods];
 
             ModelInfo = new ModelInfo(input, Version, noOfLods);
+
+            return resolutions;
         }
 
         internal void ReadContent(BinaryReaderEx input)
         {
-            Version = input.ReadInt32();
-            input.Version = Version;
+            var resolutions = ReadHeaderOnly(input);
 
-            if (Version >= 44)
-            {
-                input.UseLZOCompression = true;
-            }
-            if (Version >= 64)
-            {
-                input.UseCompressionFlag = true;
-            }
-            if (Version >= 59)
-            {
-                AppID = input.ReadUInt32();
-            }
-            if (Version >= 58)
-            {
-                MuzzleFlash = input.ReadAsciiz();
-            }
-
-            var resolutions = input.ReadFloatArray();
             var noOfLods = resolutions.Length;
-
-            Lods = new LOD[noOfLods];
-
-            ModelInfo = new ModelInfo(input, Version, noOfLods);
 
             if (Version >= 30u)
             {
