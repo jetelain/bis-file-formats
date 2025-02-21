@@ -16,6 +16,10 @@ namespace BIS.PBO
 
         public PBOFileToCompress(IPBOFileEntry file)
         {
+            if (file.Size < 1024)
+            {
+                throw new InvalidDataException("File is too small to compress");
+            }
             this.file = file;
             this.compressedData = CompressData(file);
         }

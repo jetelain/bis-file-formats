@@ -33,7 +33,7 @@ namespace PboUtil
 
             Parallel.ForEach(pbo.Files.ToList(), file =>
             {
-                if (extensionsArray.Contains(Path.GetExtension(file.FileName), StringComparer.OrdinalIgnoreCase))
+                if (extensionsArray.Contains(Path.GetExtension(file.FileName), StringComparer.OrdinalIgnoreCase) && file.Size > 1024)
                 {
                     var result = new PBOFileToCompress(file);
                     if (result.DiskSize < result.Size)
