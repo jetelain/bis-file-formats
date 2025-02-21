@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31321.278
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35728.132 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WrpUtil", "WrpUtil\WrpUtil.csproj", "{184D5A1E-8A5A-4E15-AF39-19EBB72C80BC}"
 EndProject
@@ -26,6 +26,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BIS.PAA.Encoder", "..\BIS.PAA.Encoder\BIS.PAA.Encoder.csproj", "{E65A45D8-02A3-4186-9D0F-8806C5C2E1A6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3dUtil", "P3dUtil\P3dUtil.csproj", "{EC9E571D-466E-48C7-9BBF-6B6E3187F112}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Éléments de solution", "Éléments de solution", "{52206655-2477-4E24-8851-A635A2806C92}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\dotnet.yml = ..\.github\workflows\dotnet.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
