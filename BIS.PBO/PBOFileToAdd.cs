@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace BIS.PBO
 {
@@ -24,6 +22,16 @@ namespace BIS.PBO
         public bool IsCompressed => false;
 
         public int DiskSize => Size;
+
+        public byte[] GetFileData()
+        {
+            return File.ReadAllBytes(file.FullName);
+        }
+
+        public byte[] GetCompressedData()
+        {
+            throw new InvalidOperationException();
+        }
 
         public Stream OpenRead()
         {

@@ -25,6 +25,16 @@ namespace BIS.PBO
 
         public string PboFile => pbo.PBOFilePath;
 
+        public byte[] GetFileData()
+        {
+            return pbo.GetFileData(fileEntry);
+        }
+
+        public byte[] GetCompressedData()
+        {
+            return pbo.GetCompressedData(fileEntry);
+        }
+
         public Stream OpenRead()
         {
             return pbo.GetFileEntryStream(fileEntry);

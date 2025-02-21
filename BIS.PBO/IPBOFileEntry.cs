@@ -9,6 +9,8 @@ namespace BIS.PBO
         int TimeStamp { get; }
         Stream OpenRead();
         bool IsCompressed { get; }
+        byte[] GetCompressedData();
+        byte[] GetFileData();
         int DiskSize { get; }
     }
 }

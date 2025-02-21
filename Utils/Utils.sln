@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35728.132 d17.12
+VisualStudioVersion = 17.12.35728.132
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WrpUtil", "WrpUtil\WrpUtil.csproj", "{184D5A1E-8A5A-4E15-AF39-19EBB72C80BC}"
 EndProject
@@ -31,6 +31,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Éléments de solution", "�
 	ProjectSection(SolutionItems) = preProject
 		..\.github\workflows\dotnet.yml = ..\.github\workflows\dotnet.yml
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{DDF25ECE-8FC3-4E35-BF29-0733B9471F42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PboUtil", "PboUtil\PboUtil.csproj", "{CD1FA83C-236F-415E-B5FF-A4EC5293F339}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -86,9 +90,23 @@ Global
 		{EC9E571D-466E-48C7-9BBF-6B6E3187F112}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC9E571D-466E-48C7-9BBF-6B6E3187F112}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC9E571D-466E-48C7-9BBF-6B6E3187F112}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD1FA83C-236F-415E-B5FF-A4EC5293F339}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD1FA83C-236F-415E-B5FF-A4EC5293F339}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD1FA83C-236F-415E-B5FF-A4EC5293F339}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD1FA83C-236F-415E-B5FF-A4EC5293F339}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8D1B5008-1084-43F8-9E45-AF7894ECA64C} = {DDF25ECE-8FC3-4E35-BF29-0733B9471F42}
+		{B877F60B-0E26-4572-9E6A-6C9E67C5F8D7} = {DDF25ECE-8FC3-4E35-BF29-0733B9471F42}
+		{842AB5B1-28EF-476C-88FC-DD26EF6DBD4F} = {DDF25ECE-8FC3-4E35-BF29-0733B9471F42}
+		{9399460C-6D54-4C03-A4DE-1E398A9A007E} = {DDF25ECE-8FC3-4E35-BF29-0733B9471F42}
+		{500A441F-1736-4FE1-AAE0-0DE1F52A30FB} = {DDF25ECE-8FC3-4E35-BF29-0733B9471F42}
+		{B8B2BF3E-CCB4-441C-B4A1-2036090AFF9E} = {DDF25ECE-8FC3-4E35-BF29-0733B9471F42}
+		{2B43DF8A-8D46-45FE-AD10-63AF88E0B570} = {DDF25ECE-8FC3-4E35-BF29-0733B9471F42}
+		{E65A45D8-02A3-4186-9D0F-8806C5C2E1A6} = {DDF25ECE-8FC3-4E35-BF29-0733B9471F42}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF9BC82F-3E0E-4D8D-96DC-11EFC3AF4035}

@@ -121,7 +121,22 @@ namespace BIS.PBO
             }
         }
 
-        private byte[] GetFileData(FileEntry entry)
+        internal byte[] GetCompressedData(FileEntry entry)
+        {
+            if (!entry.IsCompressed)
+            {
+                throw new InvalidOperationException();
+            }
+            var bytes = new byte[entry.DataSize];
+            lock (this)
+            {
+                PBOFileStream.Position = DataOffset + entry.StartOffset;
+                PBOFileStream.Read(bytes, 0, entry.DataSize);
+            }
+            return bytes;
+        }
+
+        internal byte[] GetFileData(FileEntry entry)
         {
             byte[] bytes;
             lock (this)
@@ -271,9 +286,9 @@ namespace BIS.PBO
             var entries = Files.Select(e => new FileEntry() { 
                 FileName = e.FileName, 
                 TimeStamp = e.TimeStamp,
-                DataSize = e.Size, 
-                UncompressedSize = 0, 
-                CompressedMagic = 0 
+                DataSize =  e.IsCompressed ? e.DiskSize : e.Size, 
+                UncompressedSize = e.IsCompressed ? e.Size : 0, 
+                CompressedMagic = e.IsCompressed ? FileEntry.CompressionMagic : 0 
             }).ToList();
 
             var offset = 0;
@@ -292,9 +307,17 @@ namespace BIS.PBO
                 }
                 foreach(var file in Files)
                 {
-                    using (var source = file.OpenRead())
+                    if (file.IsCompressed)
                     {
-                        source.CopyTo(target);
+                        var data = file.GetCompressedData();
+                        target.Write(data, 0, data.Length);
+                    }
+                    else
+                    {
+                        using (var source = file.OpenRead())
+                        {
+                            source.CopyTo(target);
+                        }
                     }
                 }
                 target.Position = 0;
@@ -346,5 +369,6 @@ namespace BIS.PBO
                 pboFileStream = null;
             }
         }
+
     }
 }
